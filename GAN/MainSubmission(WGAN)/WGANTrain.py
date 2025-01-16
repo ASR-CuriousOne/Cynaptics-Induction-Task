@@ -19,19 +19,19 @@ def main():
     DEVICE = "cuda"
 
     BATCH_SIZE = 128
-    LEARNING_RATE_DISCRI = 1e-5
+    LEARNING_RATE_CRITIC = 1e-5
     LEARNING_RATE_GENER = 1e-5
     NUM_OF_EPOCHS = 3000
     NUM_OF_CRITIC_STEP = 5
     NUM_OF_GENER_STEP = 1
-    FEATURES_DISC = 64
+    FEATURES_CRITIC = 64
     FEATURES_GEN = 64
     LAMBDA_GP = 10   
     LOAD_MODELS = True
     IMAGE_HEIGHT,IMAGE_WIDTH,COLOR_CHANNELS = 64,64,3
     LATENT_DIM = 100
 
-    SHOW = 1
+    SHOW_OUTPUT = 1
     SAVE_FIG = 10
 
 
@@ -46,7 +46,7 @@ def main():
     data_loader = DataLoader(dataset=train_data,shuffle=True,batch_size=BATCH_SIZE,pin_memory=True)
 
     gen = models.Generator(LATENT_DIM, COLOR_CHANNELS,FEATURES_GEN).to(DEVICE)
-    critic = models.Discriminator(COLOR_CHANNELS,FEATURES_DISC).to(DEVICE)
+    critic = models.Discriminator(COLOR_CHANNELS,FEATURES_CRITIC).to(DEVICE)
 
     if(LOAD_MODELS):
         gen.load_state_dict(torch.load("TrainingModels/generator.pth",weights_only=True))
@@ -57,7 +57,7 @@ def main():
 
 
     opt_gen = torch.optim.Adam(gen.parameters(),lr=LEARNING_RATE_GENER,betas=(0.0,0.9))
-    opt_critic = torch.optim.Adam(critic.parameters(),lr=LEARNING_RATE_DISCRI,betas=(0.0,0.9))
+    opt_critic = torch.optim.Adam(critic.parameters(),lr=LEARNING_RATE_CRITIC,betas=(0.0,0.9))
 
     fixed_noise = torch.randn(32,LATENT_DIM,1,1).to(DEVICE)
 
@@ -101,7 +101,7 @@ def main():
         print("Models saved.")
 
         #Show model output
-        if((epoch + 1) % SHOW == 0):        
+        if((epoch + 1) % SHOW_OUTPUT == 0):        
             gen.eval()
 
             with torch.inference_mode():
