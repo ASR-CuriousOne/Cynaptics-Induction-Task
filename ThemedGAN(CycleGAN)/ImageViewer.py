@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 import NeuralNetworks as net
 from torchvision.utils import make_grid
 from utils import CGANDataset
+import torchvision.transforms as fn
 
 import numpy as np
 print("Modules Loaded")
@@ -51,6 +52,10 @@ with torch.no_grad():
     img_grid = make_grid(
                     images ,nrow=nrows
                 )
+    img = img_grid
+    tran = fn.ToPILImage()
+    img = tran(img)
+    img.save("Test.jpg")
     plt.imshow(np.transpose(img_grid, (1, 2, 0))) 
     plt.axis(False)  
     plt.show()
@@ -64,6 +69,11 @@ with torch.no_grad():
     img_grid = make_grid(
                     images ,nrow=nrows
                 )
+    
+    img = img_grid
+    tran = fn.ToPILImage()
+    img = tran(img)
+    img.save("Test_2.jpg")
     plt.imshow(np.transpose(img_grid, (1, 2, 0)))
     plt.axis(False)    
     plt.show()
