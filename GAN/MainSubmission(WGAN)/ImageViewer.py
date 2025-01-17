@@ -4,6 +4,7 @@ from torch.utils.data import DataLoader
 from torchvision import datasets
 from torchvision import transforms
 import matplotlib.pyplot as plt
+import torchvision.transforms as fn
 import Networks as net
 from torchvision.utils import make_grid
 
@@ -22,9 +23,7 @@ LATENT_DIM = 100
 
 data_transform = transforms.Compose([transforms.Resize((IMAGE_HEIGHT,IMAGE_WIDTH)),transforms.ToTensor(),transforms.Normalize((0.5,0.5,0.5),(0.5,0.5,0.5))])
 
-train_data = datasets.ImageFolder("Training",transform=data_transform)
 
-dataloader = DataLoader(dataset=train_data,shuffle=True,batch_size=BATCH_SIZE)
 
 gen = net.Generator(LATENT_DIM, COLOR_CHANNELS,FEATURES_GEN)
 gen.load_state_dict(torch.load(MODEL_PATH,weights_only=True))
@@ -32,14 +31,6 @@ gen.load_state_dict(torch.load(MODEL_PATH,weights_only=True))
 plt.figure(figsize=(10,10))
 gen.eval()
 
-#Real Images
-with torch.no_grad():
-    z = np.random.randint(0,1000)
-    real_image,_ = next(iter(dataloader))
-    grid = make_grid(real_image,nrow=3, normalize=True)
-    plt.imshow(np.transpose(grid, (1, 2, 0)))
-    plt.axis("off")
-    plt.show()
 
 #Generated Images
 with torch.no_grad():
@@ -48,6 +39,10 @@ with torch.no_grad():
     print(generated.shape)
     grid = make_grid(generated,nrow=7, normalize=True)
     plt.imshow(np.transpose(grid, (1, 2, 0)))
+    img = grid
+    tran = fn.ToPILImage()
+    img = tran(img)
+    img.save("Test.jpg")
     plt.axis("off")
     plt.show()
 

@@ -22,7 +22,7 @@ print("Modules Loaded")
 
 #----------
 
-MODEL_PATH = "WorkingModels/Planes_with_small_batch_gen.pth"
+MODEL_PATH = "WorkingModels/Pokemon_generator.pth"
 
 BATCH_SIZE = 9
 FEATURES_DISC = 64
